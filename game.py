@@ -6,6 +6,32 @@ from streamlit_drawable_canvas import st_canvas
 # --- PAGE SETUP ---
 st.set_page_config(page_title="The NORMAD Game", page_icon="❤️", layout="centered")
 
+# --- Access control ---
+password = st.text_input("Dakhli your birthday 💌", type="password")
+
+if password != "29042003":
+    st.stop()
+
+
+def local_css(css_code):
+    st.markdown(f"<style>{css_code}</style>", unsafe_allow_html=True)
+
+local_css("""
+.stApp {
+    background-image: url('https://images.unsplash.com/photo-1525186402429-100097c577f4?auto=format&fit=crop&w=1500&q=80');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+div.block-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    padding: 2rem;
+}
+""")
+
+
 st.title("💖 The NORMAD Game")
 st.write("Choose a game mode below and let's play something sweet...")
 
@@ -15,7 +41,7 @@ game_mode = st.selectbox("Pick a mode", [
     "Compliment Generator",
     "Guess the Memory",
     "Love Letter",
-    "Draw a my artist"
+    "Draw a CHABA"
 ])
 
 # --- COMPLIMENT GENERATOR ---
@@ -32,7 +58,7 @@ if game_mode == "Compliment Generator":
         "I love you a CHABA",
         "I'd choose you in every lifetime",
         "You're my favorite notification",
-        "miss perfection"
+        "miss perfection",
         "gorgeous",
         "lucky me!!",
     ]
@@ -59,8 +85,8 @@ elif game_mode == "Guess the Memory":
         {"hint": "How did i start the conversation the first time", "answer": "Whats the best way to start a conversation"},
     ]
 
-    selected = st.selectbox("Pick a memory to guess", [m["hint"] for m in memories])
-    user_guess = st.text_input("What's your guess?")
+    selected = st.selectbox("Sahlin 3lik i know but choose", [m["hint"] for m in memories])
+    user_guess = st.text_input("What's your guess a 3ayniya?")
 
     memory = next((m for m in memories if m["hint"] == selected), None)
 
@@ -133,5 +159,5 @@ elif game_mode == "Draw a my artist":
             else:
                 st.warning("Looks like the canvas is empty! Try drawing something first.")
     with col2:
-        if st.button("Erase Drawing ❌"):
+        if st.button("Erase ❌"):
             erase_drawing()
