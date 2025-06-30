@@ -2,6 +2,8 @@ import streamlit as st
 import random
 from datetime import datetime
 from streamlit_drawable_canvas import st_canvas
+from PIL import Image
+import numpy as np
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="The NORMAD Game", page_icon="❤️", layout="centered")
@@ -29,7 +31,6 @@ st.markdown("""
         z-index: -1;
     }
     
-    /* Style the main container */
     .main .block-container {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -39,46 +40,24 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    /* Style titles */
     h1 {
         color: #4a148c !important;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         text-align: center;
     }
     
-    /* Style all text for better visibility */
     .stApp p, .stApp div, .stApp span, .stApp label {
         color: #2d1b69 !important;
         font-weight: 500;
     }
     
-    /* Password input label */
-    .stTextInput label {
+    .stTextInput label, .stSelectbox label {
         color: #4a148c !important;
         font-weight: bold;
         font-size: 1.1rem !important;
     }
     
-    /* Selectbox label */
-    .stSelectbox label {
-        color: #4a148c !important;
-        font-weight: bold;
-        font-size: 1.1rem !important;
-    }
-    
-    /* Style selectbox and inputs */
-    .stSelectbox > div > div {
-        background: rgba(255, 255, 255, 0.9) !important;
-        border-radius: 10px;
-        border: 2px solid rgba(106, 90, 205, 0.5) !important;
-    }
-    
-    .stSelectbox > div > div > div {
-        color: #2d1b69 !important;
-        font-weight: bold;
-    }
-    
-    .stTextInput > div > div > input {
+    .stSelectbox > div > div, .stTextInput > div > div > input {
         background: rgba(255, 255, 255, 0.9) !important;
         border-radius: 10px;
         border: 2px solid rgba(106, 90, 205, 0.5) !important;
@@ -96,7 +75,6 @@ st.markdown("""
         border: 2px solid rgba(106, 90, 205, 0.3);
     }
     
-    /* Style buttons */
     .stButton > button {
         background: linear-gradient(45deg, #9370db, #ba55d3);
         color: white;
@@ -113,7 +91,6 @@ st.markdown("""
         box-shadow: 0 6px 20px rgba(147, 112, 219, 0.6);
     }
     
-    /* Floating hearts animation */
     @keyframes float {
         0%, 100% { transform: translateY(0px) rotate(0deg); }
         50% { transform: translateY(-20px) rotate(180deg); }
@@ -133,7 +110,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# UI components inside the styled container
+# UI components
 st.title("Welcome to The NORMAD Game")
 
 # --- Access control ---
@@ -183,7 +160,7 @@ if game_mode == "Compliment Generator":
 
 # --- GUESS THE MEMORY GAME ---
 elif game_mode == "Guess the Memory":
-    st.write("Let's test your memory! ")
+    st.write("Let's test your memory!")
 
     memories = [
         {"hint": "May 5th, 2023", "answer": "The first text"},
@@ -191,7 +168,7 @@ elif game_mode == "Guess the Memory":
         {"hint": "Dec 20th 2024", "answer": "Becoming official"},
         {"hint": "6", "answer": "the number of times we met"},
         {"hint": "My fav thing about you", "answer": " La, Kolech"},
-        {"hint": "My favorite TV SHOW to watch", "answer": "Admiring you a chabaa, wow im good"},
+        {"hint": "My favorite TV SHOW to watch", "answer": "Admiring you a zela, wow im good"},
         {"hint": "How did i start the conversation the first time", "answer": "Whats the best way to start a conversation"},
     ]
 
@@ -201,6 +178,13 @@ elif game_mode == "Guess the Memory":
     memory = next((m for m in memories if m["hint"] == selected), None)
 
     if st.button("Reveal the memory"):
+        # Save her guess
+        with open("memory_guesses.txt", "a", encoding="utf-8") as f:
+            f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Hint: {memory['hint']}\n")
+            f.write(f"Her Guess: {user_guess.strip()}\n")
+            f.write(f"Correct Answer: {memory['answer']}\n\n")
+
+        # Show correct answer
         st.markdown(f"""
         <div style="padding: 1rem; margin: 1rem 0; background: #e6f7ff; border-left: 5px solid #1e90ff; border-radius: 10px;">
             <strong style="color:#007acc;">Correct memory:</strong> {memory['answer']}
@@ -223,6 +207,12 @@ elif game_mode == "Love Letter":
     user_note = st.text_area("Your love note", height=100)
 
     if st.button("Share your note", disabled=not user_note.strip()):
+        # Save to file
+        with open("love_notes.txt", "a", encoding="utf-8") as f:
+            f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Prompt: {selected_prompt}\n")
+            f.write(f"Note: {user_note}\n\n")
+
+        # Show back to her
         st.markdown(f"""
         <div style="padding: 1rem; margin: 1rem 0; background: #fff0f5; border-left: 5px solid #ff69b4; border-radius: 10px;">
             <strong style="color:#c71585;">Your Love Note:</strong><br>{user_note}
@@ -263,11 +253,19 @@ elif game_mode == "Draw a CHABA":
     with col1:
         if st.button("Submit Drawing 🖼️"):
             if canvas_result.image_data is not None:
-                st.success("That’s a true love home ")
+                # Save drawing as image
+                img = Image.fromarray((canvas_result.image_data).astype(np.uint8))
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                filename = f"chaba_drawing_{timestamp}.png"
+                img.save(filename)
+
+                st.success("That's a true love home 🏠")
                 st.image(canvas_result.image_data, caption="Our future house", use_column_width=True)
-                st.markdown("> I’d move in right")
+                st.markdown("> I'd move in right away.")
             else:
                 st.warning("Looks like the canvas is empty! Try drawing something first.")
     with col2:
         if st.button("Erase Drawing ❌"):
             erase_drawing()
+
+            
