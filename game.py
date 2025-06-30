@@ -128,6 +128,7 @@ game_mode = st.selectbox("Pick a mode", [
     "Compliment Generator",
     "Guess the Memory",
     "Love Letter",
+    "Love Letters for You",
     "Draw a CHABA"
 ])
 
@@ -191,6 +192,104 @@ elif game_mode == "Guess the Memory":
         </div>
         """, unsafe_allow_html=True)
 
+# --- LOVE LETTERS FOR YOU ---
+elif game_mode == "Love Letters for You":
+    st.write("Choose how you're feeling, and I'll give you exactly what you need to hear 💌")
+    
+    mood_options = [
+        "-- How are you feeling? --",
+        "Sad",
+        "Lonely", 
+        "Self-doubt",
+        "Overthinking",
+        "Noor ✨"
+    ]
+    
+    selected_mood = st.selectbox("Pick your current mood", mood_options)
+    
+    if selected_mood != "-- How are you feeling? --":
+        if st.button("Give me my letter 💝"):
+            if selected_mood == "Sad":
+                letter = """My beautiful CHABA,
+
+I know today feels heavy, but I need you to remember something incredible - you are one of the most precious souls to ever exist in this world. Do you know how lucky I am? How lucky your mom is? How lucky everyone who knows the real you is?
+
+You bring light into spaces that didn't even know they were dark. Your heart, your laugh, your way of caring about others.
+
+The world is brighter because you're in it. I'm a better person because you're in my life. 
+
+
+
+Forever yours,"""
+
+            elif selected_mood == "Lonely":
+                letter = """My dear,
+
+I know the distance feels overwhelming sometimes, and I know there are moments when you feel alone. But I need you to hear this with your whole heart:
+
+You are NEVER alone. Never.
+
+Your mama is always thinking about you, praying for you, loving you with every breath she takes. And me? even when we're not talking, you're in my thoughts, in my prayers, in every beat of my heart.
+
+We are your team, your support system, your safe place. No matter what you're going through - the good days, the bad days, the confusing days - we are here. We believe in you. We're cheering you on from every corner of our hearts.
+
+You don't have to carry anything alone anymore. We're here, and we're not going anywhere.
+
+With all my love,"""
+
+            elif selected_mood == "Self-doubt":
+                letter = """
+
+Stop right there. Before you doubt yourself for even one more second, let me remind you.
+
+You SURVIVED the bac exam. You made it through HEC. You dealt with difficult roommates and still kept it together. You handled bad friends and still chose to have a kind heart. You left your hometown.
+
+Do you see the pattern here? You are UNBREAKABLE.
+
+Every test that seemed impossible? You found a way through. Every moment when you wanted to give up? You chose to keep going.
+
+And through it all, you never stopped trying to become a better person.
+
+You are capable. Trust yourself the way I trust you - completely and without question.
+
+Proudly yours,"""
+
+            elif selected_mood == "Overthinking":
+                letter = """My precious,
+
+I can feel your mind racing from here, and I want to wrap you in the most peaceful hug right now.
+
+Take a deep breath with me. Allah SWT is with you. He has always been with you, and He always will be.
+
+That thing you're overthinking? That situation that's keeping you up at night? That decision that feels too big? Allah already knows the outcome, and He has already planned what's best for you.
+
+Every single thing that has happened in your life - the good and the challenging - has led you to exactly where you need to be. Every door that closed made room for a better one to open. Every "no" was protection for a bigger "yes."
+
+Trust in Allah's timing. Trust in His wisdom. Trust that He loves you more than you can imagine and would never give you more than you can handle.
+
+Your future is beautiful. Stop worrying about it and start looking forward to it."""
+
+            elif selected_mood == "Noor ✨":
+                letter = """Noor,
+
+NHABEK"""
+
+            # Display the letter in a beautiful format
+            st.markdown(f"""
+            <div style="padding: 2rem; margin: 1rem 0; background: linear-gradient(135deg, #fff0f5, #e6f3ff); 
+                        border-left: 5px solid #ff69b4; border-radius: 15px; 
+                        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);">
+                <div style="white-space: pre-line; color: #2d1b69; font-size: 1.05rem; line-height: 1.6;">
+                    {letter}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Save the letter with timestamp
+            with open("mood_letters.txt", "a", encoding="utf-8") as f:
+                f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Mood: {selected_mood}\n")
+                f.write(f"Letter sent:\n{letter}\n\n")
+
 # --- LOVE LETTER CHALLENGE ---
 elif game_mode == "Love Letter":
     st.write("Write a short love note based on the prompt below, and let's make it unforgettable!")
@@ -218,7 +317,7 @@ elif game_mode == "Love Letter":
             <strong style="color:#c71585;">Your Love Note:</strong><br>{user_note}
         </div>
         """, unsafe_allow_html=True)
-        st.write("That’s so sweet! Want to write another or switch to another mode?")
+        st.write("That's so sweet! Want to write another or switch to another mode?")
 
 # --- DRAW MY LOVE MODE ---
 elif game_mode == "Draw a CHABA":
@@ -267,5 +366,3 @@ elif game_mode == "Draw a CHABA":
     with col2:
         if st.button("Erase Drawing ❌"):
             erase_drawing()
-
-            
