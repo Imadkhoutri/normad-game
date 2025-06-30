@@ -6,33 +6,143 @@ from streamlit_drawable_canvas import st_canvas
 # --- PAGE SETUP ---
 st.set_page_config(page_title="The NORMAD Game", page_icon="❤️", layout="centered")
 
+# --- ROMANTIC PURPLE BACKGROUND CSS ---
+st.markdown("""
+<style>
+    .stApp {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-attachment: fixed;
+    }
+    
+    .stApp::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: -1;
+    }
+    
+    /* Style the main container */
+    .main .block-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(106, 90, 205, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Style titles */
+    h1 {
+        color: #4a148c !important;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        text-align: center;
+    }
+    
+    /* Style all text for better visibility */
+    .stApp p, .stApp div, .stApp span, .stApp label {
+        color: #2d1b69 !important;
+        font-weight: 500;
+    }
+    
+    /* Password input label */
+    .stTextInput label {
+        color: #4a148c !important;
+        font-weight: bold;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Selectbox label */
+    .stSelectbox label {
+        color: #4a148c !important;
+        font-weight: bold;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Style selectbox and inputs */
+    .stSelectbox > div > div {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-radius: 10px;
+        border: 2px solid rgba(106, 90, 205, 0.5) !important;
+    }
+    
+    .stSelectbox > div > div > div {
+        color: #2d1b69 !important;
+        font-weight: bold;
+    }
+    
+    .stTextInput > div > div > input {
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-radius: 10px;
+        border: 2px solid rgba(106, 90, 205, 0.5) !important;
+        color: #2d1b69 !important;
+        font-weight: bold;
+    }
+    
+    .stTextInput > div > div > input::placeholder {
+        color: #6a5acd !important;
+    }
+    
+    .stTextArea > div > div > textarea {
+        background: rgba(230, 220, 255, 0.8);
+        border-radius: 10px;
+        border: 2px solid rgba(106, 90, 205, 0.3);
+    }
+    
+    /* Style buttons */
+    .stButton > button {
+        background: linear-gradient(45deg, #9370db, #ba55d3);
+        color: white;
+        border-radius: 25px;
+        border: none;
+        padding: 0.5rem 2rem;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(147, 112, 219, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(147, 112, 219, 0.6);
+    }
+    
+    /* Floating hearts animation */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    .floating-hearts {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2rem;
+        animation: float 6s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 100;
+        color: rgba(255, 182, 193, 0.7);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# UI components inside the styled container
+st.title("Welcome to The NORMAD Game")
+
 # --- Access control ---
 password = st.text_input("Dakhli your birthday 💌", type="password")
 
 if password != "29042003":
     st.stop()
 
-
-def local_css(css_code):
-    st.markdown(f"<style>{css_code}</style>", unsafe_allow_html=True)
-
-local_css("""
-.stApp {
-    background-image: url('https://images.unsplash.com/photo-1525186402429-100097c577f4?auto=format&fit=crop&w=1500&q=80');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-}
-
-div.block-container {
-    background-color: rgba(255, 255, 255, 0.85);
-    border-radius: 20px;
-    padding: 2rem;
-}
-""")
-
-
-st.title("💖 The NORMAD Game")
+st.title("HEY A CHABA 💖")
 st.write("Choose a game mode below and let's play something sweet...")
 
 # --- GAME MODE SELECTION ---
@@ -121,7 +231,7 @@ elif game_mode == "Love Letter":
         st.write("That’s so sweet! Want to write another or switch to another mode?")
 
 # --- DRAW MY LOVE MODE ---
-elif game_mode == "Draw a my artist":
+elif game_mode == "Draw a CHABA":
     st.markdown("### 🎨 Draw our future house 🏡")
     st.write("Use the canvas below to create your dream house together — cozy, fancy, space-themed, whatever you imagine!")
 
@@ -159,5 +269,5 @@ elif game_mode == "Draw a my artist":
             else:
                 st.warning("Looks like the canvas is empty! Try drawing something first.")
     with col2:
-        if st.button("Erase ❌"):
+        if st.button("Erase Drawing ❌"):
             erase_drawing()
